@@ -43,10 +43,8 @@
         label { font-size: 0.7rem; color: #888; text-transform: uppercase; display: block; margin-top: 15px; }
         input { display: block; width: 100%; padding: 10px; margin-top: 5px; background: #333; border: none; color: white; border-radius: 5px; box-sizing: border-box; }
         
-        /* Selector de colores */
         .color-selector { display: flex; gap: 15px; margin-top: 10px; }
         .color-btn { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #444; cursor: pointer; transition: transform 0.2s; }
-        .color-btn:hover { transform: scale(1.1); }
         .btn-black { background: black; }
         .btn-white { background: white; }
         .btn-gray { background: #808080; }
@@ -69,9 +67,9 @@
         <div class="controls">
             <label>1. Color de la remera</label>
             <div class="color-selector">
-                <div class="color-btn btn-black" title="Negra" onclick="cambiarRemera('remera-negra.png', 'white', 'Negra')"></div>
-                <div class="color-btn btn-white" title="Blanca" onclick="cambiarRemera('remera-blanca.png', 'black', 'Blanca')"></div>
-                <div class="color-btn btn-gray" title="Gris" onclick="cambiarRemera('remera-gris.png', 'white', 'Gris')"></div>
+                <div class="color-btn btn-black" onclick="cambiarRemera('remera-negra.png', 'white', 'Negra')"></div>
+                <div class="color-btn btn-white" onclick="cambiarRemera('remera-blanca.png', 'black', 'Blanca')"></div>
+                <div class="color-btn btn-gray" onclick="cambiarRemera('remera-gris.png', 'white', 'Gris')"></div>
             </div>
 
             <label>2. Subí tu logo</label>
@@ -83,7 +81,7 @@
             <label>4. Color de letra</label>
             <input type="color" id="input-color" value="#ffffff">
 
-            <a id="whatsapp-link" href="#" target="_blank" class="btn-wa">
+            <a id="whatsapp-link" href="#" onclick="avisarCaptura()" target="_blank" class="btn-wa">
                 ENVIAR PEDIDO
             </a>
         </div>
@@ -92,6 +90,10 @@
     <script>
         const miTelefono = "5491169366685"; 
         let remeraColorActual = "Negra";
+
+        function avisarCaptura() {
+            alert("¡IMPORTANTE! Antes de continuar, por favor sacale una captura de pantalla a tu diseño para enviarla por el chat.");
+        }
 
         function cambiarRemera(archivo, colorTextoSugerido, nombreColor) {
             document.getElementById('shirt-canvas').style.backgroundImage = `url('${archivo}')`;
@@ -119,7 +121,7 @@
 
         function actualizarLink() {
             const texto = document.getElementById('input-text').value;
-            const mensaje = encodeURIComponent(`¡Hola Soulclown! Quiero una remera color ${remeraColorActual}. Texto/Diseño: "${texto}".`);
+            const mensaje = encodeURIComponent(`¡Hola Soulclown! Quiero una remera ${remeraColorActual}. Texto: "${texto}". ACÁ TE ADJUNTO LA CAPTURA DE MI DISEÑO:`);
             document.getElementById('whatsapp-link').href = `https://wa.me/${miTelefono}?text=${mensaje}`;
         }
         actualizarLink();
@@ -150,4 +152,3 @@
     </script>
 </body>
 </html>
-
