@@ -22,6 +22,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             margin: 0 auto;
             overflow: hidden;
+            transition: background 0.3s;
         }
 
         .draggable {
@@ -36,13 +37,21 @@
         }
 
         #user-image { width: 100%; display: none; pointer-events: none; }
-        #user-text { font-weight: bold; font-size: 1.2rem; text-align: center; display: block; width: 100%; pointer-events: none; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        #user-text { font-weight: bold; font-size: 1.2rem; text-align: center; display: block; width: 100%; pointer-events: none; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
 
         .controls { background: #1e1e1e; padding: 20px; border-radius: 15px; width: 300px; text-align: left; }
-        label { font-size: 0.7rem; color: #888; text-transform: uppercase; display: block; margin-top: 10px; }
+        label { font-size: 0.7rem; color: #888; text-transform: uppercase; display: block; margin-top: 15px; }
         input { display: block; width: 100%; padding: 10px; margin-top: 5px; background: #333; border: none; color: white; border-radius: 5px; box-sizing: border-box; }
         
-        .btn-wa { background: #25d366; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; margin-top: 20px; }
+        /* Selector de colores */
+        .color-selector { display: flex; gap: 15px; margin-top: 10px; }
+        .color-btn { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #444; cursor: pointer; transition: transform 0.2s; }
+        .color-btn:hover { transform: scale(1.1); }
+        .btn-black { background: black; }
+        .btn-white { background: white; }
+        .btn-gray { background: #808080; }
+
+        .btn-wa { background: #25d366; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; margin-top: 25px; }
     </style>
 </head>
 <body>
@@ -50,7 +59,7 @@
     <h1>Soulclown <span style="color:var(--accent)">Custom</span></h1>
     
     <div class="main-container">
-        <div class="canvas-container">
+        <div class="canvas-container" id="shirt-canvas">
             <div id="drag-element" class="draggable" data-x="0" data-y="0">
                 <img id="user-image" src="" alt="">
                 <span id="user-text">TU TEXTO</span>
@@ -58,13 +67,20 @@
         </div>
 
         <div class="controls">
-            <label>1. Subí tu logo</label>
+            <label>1. Color de la remera</label>
+            <div class="color-selector">
+                <div class="color-btn btn-black" title="Negra" onclick="cambiarRemera('remera-negra.png', 'white', 'Negra')"></div>
+                <div class="color-btn btn-white" title="Blanca" onclick="cambiarRemera('remera-blanca.png', 'black', 'Blanca')"></div>
+                <div class="color-btn btn-gray" title="Gris" onclick="cambiarRemera('remera-gris.png', 'white', 'Gris')"></div>
+            </div>
+
+            <label>2. Subí tu logo</label>
             <input type="file" id="upload-img" accept="image/*">
 
-            <label>2. Escribí una frase</label>
+            <label>3. Escribí una frase</label>
             <input type="text" id="input-text" placeholder="Ej: Rock & Soul">
 
-            <label>3. Color de letra</label>
+            <label>4. Color de letra</label>
             <input type="color" id="input-color" value="#ffffff">
 
             <a id="whatsapp-link" href="#" target="_blank" class="btn-wa">
@@ -75,6 +91,14 @@
 
     <script>
         const miTelefono = "5491169366685"; 
+        let remeraColorActual = "Negra";
+
+        function cambiarRemera(archivo, colorTextoSugerido, nombreColor) {
+            document.getElementById('shirt-canvas').style.backgroundImage = `url('${archivo}')`;
+            remeraColorActual = nombreColor;
+            document.getElementById('user-text').style.color = colorTextoSugerido;
+            actualizarLink();
+        }
 
         document.getElementById('upload-img').onchange = e => {
             const reader = new FileReader();
@@ -95,7 +119,7 @@
 
         function actualizarLink() {
             const texto = document.getElementById('input-text').value;
-            const mensaje = encodeURIComponent(`¡Hola Soulclown! Diseñé esta remera. Texto: "${texto}".`);
+            const mensaje = encodeURIComponent(`¡Hola Soulclown! Quiero una remera color ${remeraColorActual}. Texto/Diseño: "${texto}".`);
             document.getElementById('whatsapp-link').href = `https://wa.me/${miTelefono}?text=${mensaje}`;
         }
         actualizarLink();
