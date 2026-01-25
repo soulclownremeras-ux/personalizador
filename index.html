@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soulclown - Custom Studio</title>
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+    <style>
+        :root { --accent: #e67e22; --dark: #121212; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark); color: white; margin: 0; padding: 20px; text-align: center; }
+        .main-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 20px; }
+
+        /* Contenedor de la remera */
+        .canvas-container {
+            position: relative;
+            width: 350px;
+            height: 500px;
+            background-color: #000;
+            /* IMPORTANTE: Tu foto en GitHub debe llamarse remera-negra.png */
+            background-image: url('remera-negra.png'); 
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .draggable {
+            position: absolute;
+            width: 150px;
+            min-width: 50px;
+            padding: 10px;
+            cursor: move;
+            touch-action: none;
+            user-select: none;
+            border: 1px dashed rgba(255,255,255,0.3);
+            left: 100px;
+            top: 150px;
+        }
+
+        #user-image { width: 100%; display: none; pointer-events: none; }
+        #user-text { font-weight: bold; font-size: 1.2rem; text-align: center; display: block; width: 100%; pointer-events: none; color: white; }
+
+        .controls { background: #1e1e1e; padding: 25px; border-radius: 15px; width: 320px; text-align: left; }
+        label { font-size: 0.8rem; color: #888; text-transform: uppercase; display: block; margin-top: 15px; }
+        input { display: block; width: 100%; padding: 12px; margin-top: 5px; background: #333; border: none; color: white; border-radius: 5px; box-sizing: border-box; }
+        
+        .btn-wa { background: #25d366; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Soulclown <span style="
