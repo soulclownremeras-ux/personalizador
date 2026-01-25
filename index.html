@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soulclown Studio</title>
+    <title>Soulclown Studio - Custom</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
     <style>
         body { font-family: 'Oswald', sans-serif; background: #000; color: #fff; margin: 0; padding: 0; }
-        .main-container { width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .main-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
         
-        /* La remera ahora se adapta al ancho que le den */
         .canvas-container {
             position: relative;
-            width: 100%;
+            width: 90%;
             max-width: 450px; 
             aspect-ratio: 1/1.2;
             background-image: url('remera-negra.png'); 
@@ -25,14 +24,8 @@
         .draggable { position: absolute; width: 35%; cursor: move; left: 32%; top: 35%; touch-action: none; z-index: 10; }
         #user-image { width: 100%; display: none; pointer-events: none; }
         
-        .controls { 
-            width: 90%; 
-            max-width: 450px; 
-            padding: 20px 0;
-            text-align: left;
-        }
-
-        label { color: #e67e22; display: block; margin-top: 15px; text-transform: uppercase; font-size: 0.8rem; }
+        .controls { width: 90%; max-width: 450px; padding: 20px; box-sizing: border-box; }
+        label { color: #e67e22; display: block; margin-top: 15px; text-transform: uppercase; font-size: 0.9rem; font-weight: bold; }
         select, input { 
             width: 100%; padding: 15px; margin-top: 5px; 
             background: #1a1a1a; border: 1px solid #444; color: #fff; 
@@ -41,45 +34,82 @@
         
         .btn-wa { 
             background: #25d366; color: white; padding: 18px; display: block; 
-            margin-top: 20px; text-decoration: none; border-radius: 8px; 
-            font-weight: bold; text-align: center; text-transform: uppercase;
+            margin-top: 25px; text-decoration: none; border-radius: 8px; 
+            font-weight: bold; text-align: center; text-transform: uppercase; font-size: 1.1rem;
         }
     </style>
 </head>
 <body>
     <div class="main-container">
         <div class="canvas-container" id="shirt-canvas">
-            <div id="drag-element" class="draggable"><img id="user-image" src=""></div>
+            <div id="drag-element" class="draggable">
+                <img id="user-image" src="">
+            </div>
         </div>
         
         <div class="controls">
-            <label>Producto</label>
-            <select id="tipo" onchange="document.getElementById('shirt-canvas').style.backgroundImage='url('+this.value+')'">
-                <option value="remera-negra.png">Remera Hombre</option>
-                <option value="remera-mujer.png">Remera Mujer</option>
-                <option value="remera-nino.png">Remera Kids</option>
-                <option value="buzo.png">Buzo</option>
+            <label>1. Elegí Color y Prenda</label>
+            <select id="tipo" onchange="cambiarFondo(this.value)">
+                <optgroup label="Remeras Hombre">
+                    <option value="remera-negra.png">Negra (Hombre)</option>
+                    <option value="remera-blanca.png">Blanca (Hombre)</option>
+                    <option value="remera-gris.png">Gris Melange (Hombre)</option>
+                </optgroup>
+                <optgroup label="Otras Prendas">
+                    <option value="remera-mujer.png">Remera Mujer</option>
+                    <option value="remera-nino.png">Remera Niños</option>
+                    <option value="buzo.png">Buzo / Hoodie</option>
+                </optgroup>
             </select>
 
-            <label>Subí tu Logo</label>
+            <label>2. Subí tu Logo / Imagen</label>
             <input type="file" id="up" accept="image/*">
 
-            <a id="wa" href="https://wa.me/5491169366685" target="_blank" class="btn-wa">Enviar Diseño</a>
+            <a id="wa" href="https://wa.me/5491169366685" target="_blank" class="btn-wa">
+                Enviar Diseño por WhatsApp
+            </a>
         </div>
     </div>
+
     <script>
+        function cambiarFondo(archivo) {
+            document.getElementById('shirt-canvas').style.backgroundImage = `url('${archivo}')`;
+        }
+
         document.getElementById('up').onchange = e => {
             const r = new FileReader();
-            r.onload = ev => { const i = document.getElementById('user-image'); i.src = ev.target.result; i.style.display = 'block'; };
+            r.onload = ev => { 
+                const i = document.getElementById('user-image'); 
+                i.src = ev.target.result; 
+                i.style.display = 'block'; 
+            };
             r.readAsDataURL(e.target.files[0]);
         };
-        interact('.draggable').resizable({ edges: { left: true, right: true, bottom: true, top: true }})
-        .draggable({ listeners: { move (e) {
-            let x = (parseFloat(e.target.dataset.x) || 0) + e.dx;
-            let y = (parseFloat(e.target.dataset.y) || 0) + e.dy;
-            e.target.style.transform = `translate(${x}px, ${y}px)`;
-            e.target.dataset.x = x; e.target.dataset.y = y;
-        }}});
+
+        // Movimiento y Tamaño del logo
+        interact('.draggable').resizable({
+            edges: { left: true, right: true, bottom: true, top: true },
+            listeners: {
+              move (event) {
+                let x = (parseFloat(event.target.dataset.x) || 0) + event.deltaRect.left;
+                let y = (parseFloat(event.target.dataset.y) || 0) + event.deltaRect.top;
+                Object.assign(event.target.style, {
+                  width: `${event.rect.width}px`, height: `${event.rect.height}px`,
+                  transform: `translate(${x}px, ${y}px)`
+                });
+                event.target.dataset.x = x; event.target.dataset.y = y;
+              }
+            }
+        }).draggable({
+            listeners: {
+              move (event) {
+                let x = (parseFloat(event.target.dataset.x) || 0) + event.dx;
+                let y = (parseFloat(event.target.dataset.y) || 0) + event.dy;
+                event.target.style.transform = `translate(${x}px, ${y}px)`;
+                event.target.dataset.x = x; event.target.dataset.y = y;
+              }
+            }
+        });
     </script>
 </body>
 </html>
