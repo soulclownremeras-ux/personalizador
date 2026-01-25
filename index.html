@@ -3,103 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soulclown Studio Full</title>
+    <title>Soulclown Studio</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
     <style>
-        :root { --accent: #e67e22; --bg-dark: #0f0f0f; }
-        body { 
-            font-family: 'Oswald', sans-serif; 
-            background-color: var(--bg-dark);
-            color: white; margin: 0; padding: 0; overflow-x: hidden;
-        }
-        .main-container { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            width: 100%; /* Ocupa todo el ancho del iframe */
-        }
+        body { font-family: 'Oswald', sans-serif; background: #000; color: #fff; margin: 0; padding: 0; text-align: center; }
+        .main-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 20px; }
         .canvas-container {
             position: relative;
-            width: 100vw; /* Usa el ancho visual completo */
-            max-width: 500px; 
-            aspect-ratio: 1 / 1.2;
+            width: 100%;
+            max-width: 400px; /* Tamaño ideal para móvil */
+            aspect-ratio: 1/1.2;
             background-image: url('remera-negra.png'); 
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            border-bottom: 2px solid #333;
         }
-        .draggable {
-            position: absolute;
-            width: 30%; /* Tamaño relativo para que no se pierda en pantallas chicas */
-            min-width: 80px;
-            cursor: move;
-            left: 50%;
-            top: 45%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-            touch-action: none;
-        }
-        #user-image { width: 100%; display: none; pointer-events: none; }
-        .controls { 
-            width: 90%; 
-            max-width: 450px; 
-            padding: 20px 0;
-        }
-        label { font-size: 0.9rem; color: var(--accent); text-transform: uppercase; display: block; margin-top: 15px; text-align: left; }
-        select, input[type="file"] { 
-            display: block; width: 100%; padding: 15px; margin-top: 5px; 
-            background: #1a1a1a; border: 1px solid #444; color: white; border-radius: 8px; 
-            font-family: 'Oswald', sans-serif; box-sizing: border-box;
-        }
-        .btn-wa { 
-            background: #25d366; color: white; border: none; padding: 18px; 
-            width: 100%; border-radius: 8px; font-weight: bold; font-size: 1.1rem;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            text-decoration: none; margin-top: 20px; text-transform: uppercase;
-        }
+        .draggable { position: absolute; width: 120px; cursor: move; left: 140px; top: 180px; touch-action: none; }
+        #user-image { width: 100%; display: none; }
+        .controls { width: 90%; max-width: 400px; padding: 10px; }
+        label { color: #e67e22; display: block; margin-top: 15px; text-transform: uppercase; font-size: 0.8rem; text-align: left; }
+        select, input { width: 100%; padding: 12px; margin-top: 5px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px; box-sizing: border-box; }
+        .btn-wa { background: #25d366; color: white; padding: 15px; display: block; margin-top: 20px; text-decoration: none; border-radius: 5px; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="main-container">
         <div class="canvas-container" id="shirt-canvas">
-            <div id="drag-element" class="draggable">
-                <img id="user-image" src="" alt="">
-            </div>
+            <div id="drag-element" class="draggable"><img id="user-image" src=""></div>
         </div>
         <div class="controls">
-            <label>Elegí tu prenda</label>
-            <select id="tipo-prenda" onchange="actualizarPrenda()">
-                <option value="remera-negra.png">Remera Hombre ($39.000)</option>
-                <option value="remera-mujer.png">Remera Dama ($39.000)</option>
-                <option value="remera-nino.png">Remera Kids ($29.000)</option>
-                <option value="buzo.png">Buzo ($58.000)</option>
+            <label>Producto</label>
+            <select id="tipo" onchange="document.getElementById('shirt-canvas').style.backgroundImage='url('+this.value+')'">
+                <option value="remera-negra.png">Remera Hombre</option>
+                <option value="remera-mujer.png">Remera Dama</option>
+                <option value="remera-nino.png">Remera Kids</option>
+                <option value="buzo.png">Buzo</option>
             </select>
-            <label>Subí tu logo</label>
-            <input type="file" id="upload-img" accept="image/*">
-            <a id="whatsapp-link" href="#" target="_blank" class="btn-wa">Enviar Diseño</a>
+            <label>Logo</label>
+            <input type="file" id="up" accept="image/*">
+            <a id="wa" href="https://wa.me/5491169366685" target="_blank" class="btn-wa">ENVIAR DISEÑO</a>
         </div>
     </div>
     <script>
-        function actualizarPrenda() {
-            document.getElementById('shirt-canvas').style.backgroundImage = `url('${document.getElementById('tipo-prenda').value}')`;
-        }
-        document.getElementById('upload-img').onchange = e => {
-            const reader = new FileReader();
-            reader.onload = ev => {
-                const img = document.getElementById('user-image');
-                img.src = ev.target.result; img.style.display = 'block';
-                document.getElementById('whatsapp-link').href = "https://wa.me/5491169366685?text=" + encodeURIComponent("Hola Soulclown! Te mando mi diseño.");
-            };
-            reader.readAsDataURL(e.target.files[0]);
+        document.getElementById('up').onchange = e => {
+            const r = new FileReader();
+            r.onload = ev => { const i = document.getElementById('user-image'); i.src = ev.target.result; i.style.display = 'block'; };
+            r.readAsDataURL(e.target.files[0]);
         };
         interact('.draggable').resizable({ edges: { left: true, right: true, bottom: true, top: true }})
-        .draggable({ listeners: { move (event) {
-            let x = (parseFloat(event.target.dataset.x) || 0) + event.dx;
-            let y = (parseFloat(event.target.dataset.y) || 0) + event.dy;
-            event.target.style.transform = `translate(${x}px, ${y}px)`;
-            event.target.dataset.x = x; event.target.dataset.y = y;
+        .draggable({ listeners: { move (e) {
+            let x = (parseFloat(e.target.dataset.x) || 0) + e.dx;
+            let y = (parseFloat(e.target.dataset.y) || 0) + e.dy;
+            e.target.style.transform = `translate(${x}px, ${y}px)`;
+            e.target.dataset.x = x; e.target.dataset.y = y;
         }}});
     </script>
 </body>
