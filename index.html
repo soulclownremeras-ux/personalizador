@@ -18,37 +18,36 @@
             background-size: 30px 30px;
             color: white; 
             margin: 0; 
-            padding: 20px; 
+            padding: 10px; 
             text-align: center; 
         }
 
-        h1 { font-size: 2.5rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 5px; }
+        h1 { font-size: 2rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 5px; }
         h1 span { color: var(--accent); }
 
-        .main-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; margin-top: 30px; }
+        .main-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 10px; }
 
         .canvas-container {
             position: relative;
-            width: 350px;
-            height: 480px;
-            background-image: url('remera-negra.png'); /* Fondo inicial */
+            width: 320px;
+            height: 440px;
+            background-image: url('remera-negra.png'); 
             background-size: cover;
             background-position: center;
             margin: 0 auto;
             border-radius: 15px;
-            border: 4px solid #333;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            border: 3px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
             overflow: hidden;
-            transition: background 0.3s;
         }
 
         .draggable {
             position: absolute;
-            width: 130px;
+            width: 120px;
             cursor: move;
             touch-action: none;
-            left: 110px;
-            top: 180px;
+            left: 100px;
+            top: 160px;
             z-index: 10;
         }
 
@@ -56,37 +55,40 @@
 
         .controls { 
             background: #1a1a1a; 
-            padding: 25px; 
+            padding: 20px; 
             border-radius: 20px; 
-            width: 320px; 
+            width: 300px; 
             text-align: left;
             border: 1px solid #333;
         }
 
-        label { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; display: block; margin-top: 15px; font-weight: bold; }
+        label { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; display: block; margin-top: 15px; font-weight: bold; }
         
         select, input[type="file"] { 
-            display: block; width: 100%; padding: 12px; margin-top: 5px; 
+            display: block; width: 100%; padding: 10px; margin-top: 5px; 
             background: #000; border: 1px solid #444; color: white; border-radius: 8px; 
-            font-family: 'Oswald', sans-serif;
+            font-family: 'Oswald', sans-serif; font-size: 0.9rem;
         }
         
-        .color-selector { display: flex; gap: 10px; margin-top: 10px; }
-        .color-btn { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #555; cursor: pointer; transition: 0.2s; }
-        .color-btn:hover { transform: scale(1.1); border-color: var(--accent); }
-        
         .btn-wa { 
-            background: #25d366; color: white; border: none; padding: 18px; 
-            width: 100%; border-radius: 10px; font-weight: bold; font-size: 1.2rem;
+            background: #25d366; color: white; border: none; padding: 15px; 
+            width: 100%; border-radius: 10px; font-weight: bold; font-size: 1rem;
             cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            gap: 10px; text-decoration: none; margin-top: 25px;
+            gap: 10px; text-decoration: none; margin-top: 20px;
+        }
+
+        /* BOTÓN PARA VOLVER A TIENDA NUBE */
+        .btn-comprar {
+            background: var(--accent); color: white; border: none; padding: 15px; 
+            width: 100%; border-radius: 10px; font-weight: bold; font-size: 1rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            margin-top: 10px; text-decoration: none; text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
     <h1>Soulclown <span>Studio</span></h1>
-    <p style="color:#666; letter-spacing: 2px;">PERSONALIZÁ TU PRODUCTO</p>
     
     <div class="main-container">
         <div class="canvas-container" id="shirt-canvas">
@@ -106,12 +108,16 @@
                 <option value="buzo.png">Buzo / Hoodie</option>
             </select>
 
-            <label>2. Subí tu logo (PNG/JPG)</label>
+            <label>2. Subí tu logo</label>
             <input type="file" id="upload-img" accept="image/*">
 
-            <a id="whatsapp-link" href="#" onclick="alert('¡No olvides la captura!')" target="_blank" class="btn-wa">
-                ENVIAR PEDIDO
+            <a id="whatsapp-link" href="#" onclick="alert('¡Mandá el diseño y volvé para elegir tu talle!')" target="_blank" class="btn-wa">
+                1. ENVIAR DISEÑO POR WA
             </a>
+
+            <button onclick="finalizarCompra()" class="btn-comprar">
+                2. ELEGIR TALLE Y PAGAR
+            </button>
         </div>
     </div>
 
@@ -121,10 +127,16 @@
 
         function actualizarPrenda() {
             const select = document.getElementById('tipo-prenda');
-            const archivo = select.value;
+            document.getElementById('shirt-canvas').style.backgroundImage = `url('${select.value}')`;
             prendaActual = select.options[select.selectedIndex].text;
-            document.getElementById('shirt-canvas').style.backgroundImage = `url('${archivo}')`;
             actualizarLink();
+        }
+
+        function finalizarCompra() {
+            // Esto hace que la página de Tienda Nube scrollee hacia abajo del iframe
+            window.parent.postMessage('scroll_down', '*');
+            // Por si no está en un iframe, un mensaje de guía
+            alert("¡Genial! Ahora elegí tu talle abajo en la tienda y dale a 'Agregar al carrito'.");
         }
 
         document.getElementById('upload-img').onchange = e => {
@@ -139,12 +151,11 @@
         };
 
         function actualizarLink() {
-            const mensaje = encodeURIComponent(`¡Hola! Diseñé mi producto: ${prendaActual}. Te paso la captura del diseño.`);
+            const mensaje = encodeURIComponent(`¡Hola! Ya diseñé mi ${prendaActual} en el personalizador. Te paso la captura.`);
             document.getElementById('whatsapp-link').href = `https://wa.me/${miTelefono}?text=${mensaje}`;
         }
         actualizarLink();
 
-        // Lógica de movimiento y tamaño
         interact('.draggable').resizable({
             edges: { left: true, right: true, bottom: true, top: true },
             listeners: {
