@@ -7,24 +7,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
     <style>
-        body { font-family: 'Oswald', sans-serif; background: #000; color: #fff; margin: 0; padding: 0; text-align: center; }
-        .main-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 20px; }
+        body { font-family: 'Oswald', sans-serif; background: #000; color: #fff; margin: 0; padding: 0; }
+        .main-container { width: 100%; display: flex; flex-direction: column; align-items: center; }
+        
+        /* La remera ahora se adapta al ancho que le den */
         .canvas-container {
             position: relative;
             width: 100%;
-            max-width: 400px; /* Tamaño ideal para móvil */
+            max-width: 450px; 
             aspect-ratio: 1/1.2;
             background-image: url('remera-negra.png'); 
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
         }
-        .draggable { position: absolute; width: 120px; cursor: move; left: 140px; top: 180px; touch-action: none; }
-        #user-image { width: 100%; display: none; }
-        .controls { width: 90%; max-width: 400px; padding: 10px; }
-        label { color: #e67e22; display: block; margin-top: 15px; text-transform: uppercase; font-size: 0.8rem; text-align: left; }
-        select, input { width: 100%; padding: 12px; margin-top: 5px; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px; box-sizing: border-box; }
-        .btn-wa { background: #25d366; color: white; padding: 15px; display: block; margin-top: 20px; text-decoration: none; border-radius: 5px; font-weight: bold; }
+
+        .draggable { position: absolute; width: 35%; cursor: move; left: 32%; top: 35%; touch-action: none; z-index: 10; }
+        #user-image { width: 100%; display: none; pointer-events: none; }
+        
+        .controls { 
+            width: 90%; 
+            max-width: 450px; 
+            padding: 20px 0;
+            text-align: left;
+        }
+
+        label { color: #e67e22; display: block; margin-top: 15px; text-transform: uppercase; font-size: 0.8rem; }
+        select, input { 
+            width: 100%; padding: 15px; margin-top: 5px; 
+            background: #1a1a1a; border: 1px solid #444; color: #fff; 
+            border-radius: 8px; font-family: 'Oswald', sans-serif; box-sizing: border-box; 
+        }
+        
+        .btn-wa { 
+            background: #25d366; color: white; padding: 18px; display: block; 
+            margin-top: 20px; text-decoration: none; border-radius: 8px; 
+            font-weight: bold; text-align: center; text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
@@ -32,17 +51,20 @@
         <div class="canvas-container" id="shirt-canvas">
             <div id="drag-element" class="draggable"><img id="user-image" src=""></div>
         </div>
+        
         <div class="controls">
             <label>Producto</label>
             <select id="tipo" onchange="document.getElementById('shirt-canvas').style.backgroundImage='url('+this.value+')'">
                 <option value="remera-negra.png">Remera Hombre</option>
-                <option value="remera-mujer.png">Remera Dama</option>
+                <option value="remera-mujer.png">Remera Mujer</option>
                 <option value="remera-nino.png">Remera Kids</option>
                 <option value="buzo.png">Buzo</option>
             </select>
-            <label>Logo</label>
+
+            <label>Subí tu Logo</label>
             <input type="file" id="up" accept="image/*">
-            <a id="wa" href="https://wa.me/5491169366685" target="_blank" class="btn-wa">ENVIAR DISEÑO</a>
+
+            <a id="wa" href="https://wa.me/5491169366685" target="_blank" class="btn-wa">Enviar Diseño</a>
         </div>
     </div>
     <script>
