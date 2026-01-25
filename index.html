@@ -6,55 +6,102 @@
     <title>Soulclown - Custom Studio</title>
     <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
     <style>
-        :root { --accent: #e67e22; --dark: #121212; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--dark); color: white; margin: 0; padding: 20px; text-align: center; }
+        :root { --accent: #e67e22; --dark: #0a0a0a; }
+        
+        body { 
+            font-family: 'Oswald', sans-serif; 
+            background-image: url('fondo-soulclown.jpg'); /* TU NUEVO FONDO */
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: white; 
+            margin: 0; 
+            padding: 20px; 
+            text-align: center; 
+        }
+
+        /* Overlay oscuro para que se lea todo bien */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: -1;
+        }
+
+        h1 { font-size: 2.5rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+
         .main-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 20px; }
 
         .canvas-container {
             position: relative;
-            width: 320px;
-            height: 450px;
-            background-color: #000;
+            width: 350px;
+            height: 480px;
             background-image: url('remera-negra.png'); 
-            background-size: cover;
+            background-size: contain;
+            background-repeat: no-repeat;
             background-position: center;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             margin: 0 auto;
-            overflow: hidden;
-            transition: background 0.3s;
+            filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
         }
 
         .draggable {
             position: absolute;
-            width: 120px;
+            width: 130px;
             cursor: move;
             touch-action: none;
-            user-select: none;
-            left: 100px;
-            top: 130px;
+            left: 110px;
+            top: 140px;
             z-index: 10;
         }
 
         #user-image { width: 100%; display: none; pointer-events: none; }
-        #user-text { font-weight: bold; font-size: 1.2rem; text-align: center; display: block; width: 100%; pointer-events: none; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        #user-text { 
+            font-weight: bold; 
+            font-size: 1.3rem; 
+            text-align: center; 
+            display: block; 
+            width: 100%; 
+            pointer-events: none; 
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+        }
 
-        .controls { background: #1e1e1e; padding: 20px; border-radius: 15px; width: 300px; text-align: left; }
-        label { font-size: 0.7rem; color: #888; text-transform: uppercase; display: block; margin-top: 15px; }
-        input { display: block; width: 100%; padding: 10px; margin-top: 5px; background: #333; border: none; color: white; border-radius: 5px; box-sizing: border-box; }
+        .controls { 
+            background: rgba(20, 20, 20, 0.9); 
+            padding: 25px; 
+            border-radius: 20px; 
+            width: 320px; 
+            text-align: left;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        label { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; display: block; margin-top: 15px; font-weight: bold; }
+        
+        input { 
+            display: block; width: 100%; padding: 12px; margin-top: 5px; 
+            background: #222; border: 1px solid #444; color: white; border-radius: 8px; 
+        }
         
         .color-selector { display: flex; gap: 15px; margin-top: 10px; }
-        .color-btn { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #444; cursor: pointer; transition: transform 0.2s; }
-        .btn-black { background: black; }
-        .btn-white { background: white; }
-        .btn-gray { background: #808080; }
-
-        .btn-wa { background: #25d366; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; margin-top: 25px; }
+        .color-btn { 
+            width: 40px; height: 40px; border-radius: 50%; border: 2px solid #555; 
+            cursor: pointer; transition: 0.3s; 
+        }
+        .color-btn:hover { transform: translateY(-3px); border-color: var(--accent); }
+        
+        .btn-wa { 
+            background: #25d366; color: white; border: none; padding: 18px; 
+            width: 100%; border-radius: 10px; font-weight: bold; font-size: 1.1rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            gap: 10px; text-decoration: none; margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
     </style>
 </head>
 <body>
 
-    <h1>Soulclown <span style="color:var(--accent)">Custom</span></h1>
+    <h1>Soulclown <span style="color:var(--accent)">Studio</span></h1>
     
     <div class="main-container">
         <div class="canvas-container" id="shirt-canvas">
@@ -65,24 +112,24 @@
         </div>
 
         <div class="controls">
-            <label>1. Color de la remera</label>
+            <label>1. Color de prenda</label>
             <div class="color-selector">
-                <div class="color-btn btn-black" onclick="cambiarRemera('remera-negra.png', 'white', 'Negra')"></div>
-                <div class="color-btn btn-white" onclick="cambiarRemera('remera-blanca.png', 'black', 'Blanca')"></div>
-                <div class="color-btn btn-gray" onclick="cambiarRemera('remera-gris.png', 'white', 'Gris')"></div>
+                <div class="color-btn" style="background:black" onclick="cambiarRemera('remera-negra.png', 'white', 'Negra')"></div>
+                <div class="color-btn" style="background:white" onclick="cambiarRemera('remera-blanca.png', 'black', 'Blanca')"></div>
+                <div class="color-btn" style="background:#808080" onclick="cambiarRemera('remera-gris.png', 'white', 'Gris')"></div>
             </div>
 
-            <label>2. Subí tu logo</label>
+            <label>2. Tu Logo / Imagen</label>
             <input type="file" id="upload-img" accept="image/*">
 
-            <label>3. Escribí una frase</label>
-            <input type="text" id="input-text" placeholder="Ej: Rock & Soul">
+            <label>3. Frase personalizada</label>
+            <input type="text" id="input-text" placeholder="Escribí acá...">
 
-            <label>4. Color de letra</label>
+            <label>4. Color de la letra</label>
             <input type="color" id="input-color" value="#ffffff">
 
-            <a id="whatsapp-link" href="#" onclick="avisarCaptura()" target="_blank" class="btn-wa">
-                ENVIAR PEDIDO
+            <a id="whatsapp-link" href="#" onclick="alert('¡No olvides la captura!')" target="_blank" class="btn-wa">
+                ENVIAR DISEÑO
             </a>
         </div>
     </div>
@@ -90,10 +137,6 @@
     <script>
         const miTelefono = "5491169366685"; 
         let remeraColorActual = "Negra";
-
-        function avisarCaptura() {
-            alert("¡IMPORTANTE! Antes de continuar, por favor sacale una captura de pantalla a tu diseño para enviarla por el chat.");
-        }
 
         function cambiarRemera(archivo, colorTextoSugerido, nombreColor) {
             document.getElementById('shirt-canvas').style.backgroundImage = `url('${archivo}')`;
@@ -114,14 +157,14 @@
 
         const txtDisplay = document.getElementById('user-text');
         document.getElementById('input-text').oninput = e => { 
-            txtDisplay.innerText = e.target.value || "TU TEXTO"; 
+            txtDisplay.innerText = e.target.value.toUpperCase() || "TU TEXTO"; 
             actualizarLink(); 
         };
         document.getElementById('input-color').oninput = e => { txtDisplay.style.color = e.target.value; };
 
         function actualizarLink() {
             const texto = document.getElementById('input-text').value;
-            const mensaje = encodeURIComponent(`¡Hola Soulclown! Quiero una remera ${remeraColorActual}. Texto: "${texto}". ACÁ TE ADJUNTO LA CAPTURA DE MI DISEÑO:`);
+            const mensaje = encodeURIComponent(`¡Hola! Diseñé mi Soulclown ${remeraColorActual}. Texto: "${texto}". Te paso la captura.`);
             document.getElementById('whatsapp-link').href = `https://wa.me/${miTelefono}?text=${mensaje}`;
         }
         actualizarLink();
