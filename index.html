@@ -7,8 +7,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
     <style>
-        body { font-family: 'Oswald', sans-serif; background: #000; color: #fff; margin: 0; padding: 0; }
-        .main-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
+        /* FONDO ACTUALIZADO CON IMAGEN GLITCH */
+        body { 
+            font-family: 'Oswald', sans-serif; 
+            background-image: url('https://raw.githubusercontent.com/soulclownremeras-ux/personalizador/main/Gemini_Generated_Image_nq7ntcnq7ntcnq7n.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: #fff; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        /* CONTENEDOR CON TRANSPARENCIA PARA RESALTAR SOBRE EL FONDO */
+        .main-container { 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px 0; 
+            min-height: 100vh;
+            background-color: rgba(0, 0, 0, 0.6); /* Capa oscura para legibilidad */
+        }
         
         .canvas-container {
             position: relative;
@@ -19,12 +40,22 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
+            /* Recuadro de estampa opcional para guiar al cliente */
+            border: 1px dashed rgba(255,255,255,0.2);
         }
 
         .draggable { position: absolute; width: 35%; cursor: move; left: 32%; top: 35%; touch-action: none; z-index: 10; }
         #user-image { width: 100%; display: none; pointer-events: none; }
         
-        .controls { width: 90%; max-width: 450px; padding: 20px; box-sizing: border-box; }
+        .controls { 
+            width: 90%; 
+            max-width: 450px; 
+            padding: 20px; 
+            box-sizing: border-box; 
+            background: rgba(26, 26, 26, 0.9); /* Controles sólidos */
+            margin-top: 20px;
+            border-radius: 12px;
+        }
         label { color: #e67e22; display: block; margin-top: 15px; text-transform: uppercase; font-size: 0.9rem; font-weight: bold; }
         select, input { 
             width: 100%; padding: 15px; margin-top: 5px; 
@@ -86,7 +117,7 @@
             r.readAsDataURL(e.target.files[0]);
         };
 
-        // Movimiento y Tamaño del logo
+        // Movimiento y Tamaño del logo (Mantiene tu lógica original)
         interact('.draggable').resizable({
             edges: { left: true, right: true, bottom: true, top: true },
             listeners: {
